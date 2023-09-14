@@ -3,8 +3,8 @@ import time
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
-TRIG = 16
-ECHO = 20
+TRIG = 15
+ECHO = 18
 GPIO.setup(TRIG,GPIO.OUT)
 GPIO.setup(ECHO,GPIO.IN)
 GPIO.output(TRIG, False)

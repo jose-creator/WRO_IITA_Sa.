@@ -102,10 +102,10 @@ while True:
     #setAngle() # Use this function to set the servo motor point
     
     # Convert accelerometer Y axis values from 0 to 180   
-    value = (Az - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+    value = (Ay - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
     value = int(value)
     print(value)
     if value >= 0 and value <= 180:
         # Write these values on the servo motor
         angle(value) # Rotate the servo motor using the sensor values
-        sleep(0.08)
+        sleep(0.1)

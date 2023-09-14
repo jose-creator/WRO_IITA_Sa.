@@ -1,19 +1,19 @@
 import RPi.GPIO as GPIO
 import time
-import cv2
+#import cv2
 import numpy as np
 
 
 #configuracion de pines GPIO
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
-
+"""
 cap=cv2.VideoCapture(0)
 lower_range=np.array([150,142,7])
 upper_range=np.array([179,255,255])
 lower_range1=np.array([56,36,26])
 upper_range1=np.array([88,255,255])
-
+"""
 in1 = 27
 in2 = 22
 en = 17
@@ -22,8 +22,8 @@ servo_pin = 14
 
 trigger_sensor_frontal = 16
 echo_sensor_frontal = 20
-trigger_sensor_der = 26
-echo_sensor_der = 19
+trigger_sensor_der = 19
+echo_sensor_der = 26
 trigger_sensor_izq = 15
 echo_sensor_izq = 18
 
@@ -31,12 +31,20 @@ echo_sensor_izq = 18
 #Configuracion de pines como entradas y salidas
 GPIO.setup(trigger_sensor_frontal,GPIO.OUT)
 GPIO.setup(echo_sensor_frontal,GPIO.IN)
+GPIO.setup(trigger_sensor_der,GPIO.OUT)
+GPIO.setup(echo_sensor_der,GPIO.IN)
+GPIO.setup(trigger_sensor_izq,GPIO.OUT)
+GPIO.setup(echo_sensor_izq,GPIO.IN)
+
+
 GPIO.setup(servo_pin, GPIO.OUT)
 
 GPIO.setup(in1,GPIO.OUT)
 GPIO.setup(in2,GPIO.OUT)
 GPIO.setup(en,GPIO.OUT)
 
+pwm2= GPIO.PWM(en, 50)
+pwm2.start(0)  
 pwm= GPIO.PWM(servo_pin, 50)
 pwm.start(0)           
 
@@ -45,30 +53,21 @@ pwm.start(0)
 
 # Iniciar el PWM con un ciclo de trabajo del 0%
 
-def avanzar():
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(in1,GPIO.OUT)
-    GPIO.setup(in2,GPIO.OUT)
-    GPIO.setup(en,GPIO.OUT)
-    
+def avanzar():  
     GPIO.output(en,GPIO.HIGH)
     GPIO.output(in1,GPIO.HIGH)
     GPIO.output(in2,GPIO.LOW)
+    pwm2.ChangeDutyCycle(65)
     
 def setAngle(angle):
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(servo_pin, GPIO.OUT)
     duty = angle / 18 + 3
     GPIO.output(servo_pin, True)
     pwm.ChangeDutyCycle(duty)
-    time.sleep(1)
+    time.sleep(0.1)
     GPIO.output(servo_pin, False)
     pwm.ChangeDutyCycle(duty)
     
 def distancia(TRIG, ECHO):
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(TRIG,GPIO.OUT)
-    GPIO.setup(ECHO,GPIO.IN)
     GPIO.output(TRIG, True)
     time.sleep(0.00001)
     GPIO.output(TRIG, False)
@@ -79,13 +78,12 @@ def distancia(TRIG, ECHO):
     while GPIO.input(ECHO)==1:
          global end
          end = time.time()
-     
-     
+
     pulse_duration = end - start
     distance = pulse_duration * 17165
     distance = round(distance, 1)
     #print ('Distance:',distance,'cm')
-    GPIO.cleanup()   
+    #GPIO.cleanup()   
     #time.sleep(0.7)      
     
     return int(distance)
@@ -156,8 +154,8 @@ while True:
     else:
         avanzar() 
         setAngle(30)
-"""
 
+"""
 while True:
     
     dist_frontal = distancia(trigger_sensor_frontal , echo_sensor_frontal)
@@ -165,27 +163,33 @@ while True:
     dist_izq = distancia(trigger_sensor_izq  , echo_sensor_izq)
     print("frontal =",dist_frontal,"der =", dist_der,"izq =", dist_izq)
     avanzar()
+   
+    if dist_frontal > 70: 
+        print("recto")
+        setAngle(33)
+       
+    """ 
+    if dist_izq < 20 and dist_izq < dist_der:
+            print("Dobla para la derecha")
+            setAngle(37)
+        
+    if dist_der < 20 and dist_der < dist_izq:
+            print("Dobla para la izquierda")
     
-    if dist_frontal > 60: 
-        print("pared")
-        setAngle(30)
+            setAngle(28)
+    """
+    while dist_frontal < 70:
         
-    elif dist_frontal < 60:
-         
-        print("pared")
-        setAngle(50)
-        
-    elif dist_izq < 60:
-        print("Dobla para la derecha")
-         
-        setAngle(50)
-    elif dist_der < 60:
-        print("Dobla para la izquierda")
-    
-        setAngle(7)
-    else:
-        
-        setAngle(30)
+        if dist_izq < dist_der:
+            print("Dobla para la derecha")
+            setAngle(45)
+            time.sleep(0.7)
+        if dist_der < dist_izq:
+            print("Dobla para la izquierda")
+            setAngle(18)
+            time.sleep(0.7)
+        break
+            
 
     #time.sleep(0.4)
 
