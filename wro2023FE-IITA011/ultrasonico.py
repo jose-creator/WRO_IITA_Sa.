@@ -3,8 +3,8 @@ import time
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
-TRIG = 15
-ECHO = 18
+TRIG = 19
+ECHO = 26
 GPIO.setup(TRIG,GPIO.OUT)
 GPIO.setup(ECHO,GPIO.IN)
 GPIO.output(TRIG, False)
@@ -29,6 +29,6 @@ while True:
     distance = round(distance, 1)
     print ('Distance:',distance,'cm')
     GPIO.cleanup()   
-    time.sleep(0.7)      
+    time.sleep(0.4)      
         
 

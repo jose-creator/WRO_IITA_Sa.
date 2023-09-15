@@ -22,12 +22,13 @@ def red(img):
             y1 = int(y+y+w)//2
             cv2.circle(img,(x1,y1),4,(255,0,255),-1)
             cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2)
-            cv2.putText(frame,("DETECT"),(10,60),cv2.FONT_HERSHEY_SIMPLEX,0.6,(0,0,255),2)
+            #cv2.putText(frame,("DETECT"),(10,60),cv2.FONT_HERSHEY_SIMPLEX,0.6,(0,0,255),2)
+    
     r=len(a)
     cv2.putText(frame,("Red: " + str(r)),(111,432),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
-    r1 = str(r)
     
-    return int(r1)
+    return int(r)
+    
 
 def green(img):
     hsv=cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
@@ -44,16 +45,17 @@ def green(img):
             y2 = int(y+y+w)//2
             cv2.circle(img,(x2,y2),4,(255,0,255),-1)
             cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
-            cv2.putText(frame,("DETECT"),(10,60),cv2.FONT_HERSHEY_SIMPLEX,0.6,(0,255,0),2)
+            #cv2.putText(frame,("DETECT"),(10,60),cv2.FONT_HERSHEY_SIMPLEX,0.6,(0,255,0),2)
+    
     g = len(b)
     cv2.putText(frame,("Green: " + str(g)),(200,432),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
-    g1 = str(g)
     
-    return int(g1)
+    return int(g)
+    
 
 while True:
     ret,frame=cap.read()
-    frame=cv2.resize(frame,(440,280))
+    frame=cv2.resize(frame,(640,480))
     red(frame)
     green(frame)
     #g2 = int(g1)
@@ -61,10 +63,11 @@ while True:
     cv2.imshow("FRAME",frame)
     if cv2.waitKey(1)&0xFF==27:
         break
-    
+"""
     if red(frame) > 0:
         print("a")
     elif green(frame) > 0:
         print("b")
+"""
 cap.release()
 cv2.destroyAllWindows()
