@@ -3,17 +3,11 @@
 This repository offers information about all the proccess of development of the project Groundron. 
 IITA FE 2 Participants and Roles:
 
-* **Ezequiel Toconas**
-   * Electronics & Hardware
-
-* **Jose Luis Gonzalez**
-   * Software 
-
-* **Axel Chungara**
-   * Design & Construction 
+* **Ezequiel Toconas - Electronics & Hardware**
+* **Jose Luis Gonzalez - Software**
+* **Axel Chungara - Design & Construction**
 
 * **Esteban Yurquina**
-   * Mentor
 
 <p 
 align="center">
