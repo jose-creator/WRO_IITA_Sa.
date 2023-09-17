@@ -61,9 +61,23 @@ def avanzar():
     GPIO.output(en,GPIO.HIGH)
     GPIO.output(in1,GPIO.HIGH)
     GPIO.output(in2,GPIO.LOW)
-    pwm2.ChangeDutyCycle(60)
+    pwm2.ChangeDutyCycle(75)
+    
+    ret,frame=cap.read() 
+    red(frame)
+    green(frame)
+    cv2.imshow("FRAME",frame)
+    if cv2.waitKey(1)&0xFF==27:
+        print("nada")
 
 def setAngle(angle):
+    ret,frame=cap.read() 
+    red(frame)
+    green(frame)
+    cv2.imshow("FRAME",frame)
+    if cv2.waitKey(1)&0xFF==27:
+        print("nada")
+    
     duty = angle / 18 + 3
     GPIO.output(servo_pin, True)
     pwm.ChangeDutyCycle(duty)
@@ -75,12 +89,16 @@ def setAngle(angle):
     red(frame)
     green(frame)
     cv2.imshow("FRAME",frame)
+    if cv2.waitKey(1)&0xFF==27:
+        print("nada")
 
 def distancia(TRIG, ECHO):
     ret,frame=cap.read() 
     red(frame)
     green(frame)
     cv2.imshow("FRAME",frame)
+    if cv2.waitKey(1)&0xFF==27:
+        print("nada") 
     
     count = time.time()
     start = time.time()  
@@ -105,7 +123,8 @@ def distancia(TRIG, ECHO):
     red(frame)
     green(frame)
     cv2.imshow("FRAME",frame)
-
+    if cv2.waitKey(1)&0xFF==27:
+        print("nada")
     return int(distance)
 
 def red(img):
@@ -211,12 +230,14 @@ while True:
             avanzar()
             x += 1
             
-            if x == 5:
+            if x == 2:
                 
                 ret,frame=cap.read() 
                 red(frame)
                 green(frame)
                 cv2.imshow("FRAME",frame)
+                if cv2.waitKey(1)&0xFF==27:
+                    break
                 
                 dist_frontal = distancia(trigger_sensor_frontal , echo_sensor_frontal)
                 
@@ -224,6 +245,8 @@ while True:
                 red(frame)
                 green(frame)
                 cv2.imshow("FRAME",frame)
+                if cv2.waitKey(1)&0xFF==27:
+                    break
                 
                 dist_der = distancia(trigger_sensor_der , echo_sensor_der)
                 
@@ -231,6 +254,8 @@ while True:
                 red(frame)
                 green(frame)
                 cv2.imshow("FRAME",frame)
+                if cv2.waitKey(1)&0xFF==27:
+                    break
                 
                 dist_izq = distancia(trigger_sensor_izq  , echo_sensor_izq)
                 
@@ -238,6 +263,8 @@ while True:
                 red(frame)
                 green(frame)
                 cv2.imshow("FRAME",frame)
+                if cv2.waitKey(1)&0xFF==27:
+                    break
                 
                 print("frontal =",dist_frontal,"der =", dist_der,"izq =", dist_izq)
                 
@@ -245,6 +272,8 @@ while True:
                 red(frame)
                 green(frame)
                 cv2.imshow("FRAME",frame)
+                if cv2.waitKey(1)&0xFF==27:
+                    break
                 
                 x = 0
                 
@@ -252,6 +281,8 @@ while True:
                 red(frame)
                 green(frame)
                 cv2.imshow("FRAME",frame)
+                if cv2.waitKey(1)&0xFF==27:
+                    break
                 
                 if dist_frontal < 60:
                     
@@ -259,6 +290,8 @@ while True:
                     red(frame)
                     green(frame)
                     cv2.imshow("FRAME",frame)
+                    if cv2.waitKey(1)&0xFF==27:
+                        break
                     
                     if dist_izq < dist_der:
                         
@@ -266,6 +299,8 @@ while True:
                         red(frame)
                         green(frame)
                         cv2.imshow("FRAME",frame)
+                        if cv2.waitKey(1)&0xFF==27:
+                            break
                         
                         print("Dobla para la derecha")
                         setAngle(50)
@@ -274,13 +309,17 @@ while True:
                         red(frame)
                         green(frame)
                         cv2.imshow("FRAME",frame)
+                        if cv2.waitKey(1)&0xFF==27:
+                            break
                         
-                        time.sleep(0.1)
+                        time.sleep(0.5)
                         
                         ret,frame=cap.read() 
                         red(frame)
                         green(frame)
-                        cv2.imshow("FRAME",frame) 
+                        cv2.imshow("FRAME",frame)
+                        if cv2.waitKey(1)&0xFF==27:
+                            break
                         
                     elif dist_der < dist_izq:
                         
@@ -288,6 +327,8 @@ while True:
                         red(frame)
                         green(frame)
                         cv2.imshow("FRAME",frame)
+                        if cv2.waitKey(1)&0xFF==27:
+                            break
                         
                         print("Dobla para la izquierda")
                         setAngle(14)
@@ -296,13 +337,17 @@ while True:
                         red(frame)
                         green(frame)
                         cv2.imshow("FRAME",frame)
+                        if cv2.waitKey(1)&0xFF==27:
+                            break
                         
-                        time.sleep(0.1)
+                        time.sleep(0.5)
                         
                         ret,frame=cap.read() 
                         red(frame)
                         green(frame)
-                        cv2.imshow("FRAME",frame) 
+                        cv2.imshow("FRAME",frame)
+                        if cv2.waitKey(1)&0xFF==27:
+                            break
                 
                 if dist_frontal > 60:
                     
@@ -310,6 +355,8 @@ while True:
                     red(frame)
                     green(frame)
                     cv2.imshow("FRAME",frame)
+                    if cv2.waitKey(1)&0xFF==27:
+                            break
                     
                     print("recto")
                     setAngle(30)
@@ -318,12 +365,16 @@ while True:
                     red(frame)
                     green(frame)
                     cv2.imshow("FRAME",frame)
+                    if cv2.waitKey(1)&0xFF==27:
+                            break
                
                     if dist_izq < 120 and dist_izq < dist_der:
                             ret,frame=cap.read() 
                             red(frame)
                             green(frame)
                             cv2.imshow("FRAME",frame)
+                            if cv2.waitKey(1)&0xFF==27:
+                                break
                         
                             print("pared derecha")
                             setAngle(39)
@@ -332,12 +383,16 @@ while True:
                             red(frame)
                             green(frame)
                             cv2.imshow("FRAME",frame)
+                            if cv2.waitKey(1)&0xFF==27:
+                                break
                             
                     elif dist_der < 120 and dist_der < dist_izq:
                             ret,frame=cap.read() 
                             red(frame)
                             green(frame)
                             cv2.imshow("FRAME",frame)
+                            if cv2.waitKey(1)&0xFF==27:
+                                break
                             
                             print("pared izquierda")
                             setAngle(25)
@@ -346,46 +401,70 @@ while True:
                             red(frame)
                             green(frame)
                             cv2.imshow("FRAME",frame)
+                            if cv2.waitKey(1)&0xFF==27:
+                                break
          
                 ret,frame=cap.read() 
                 red(frame)
                 green(frame)
                 cv2.imshow("FRAME",frame)
+                if cv2.waitKey(1)&0xFF==27:
+                    break
                 
-                if red(frame) >= 1 or green(frame) >=1:
-                
+                while red(frame) >= 1 or green(frame) >=1:
+                    
+                    ret,frame=cap.read() 
+                    red(frame)
+                    green(frame)
+                    cv2.imshow("FRAME",frame)
+                    if cv2.waitKey(1)&0xFF==27:
+                        break
+                    
                     if red(frame) >= 1:
+                        
                         ret,frame=cap.read() 
                         red(frame)
                         green(frame)
                         cv2.imshow("FRAME",frame)
+                        if cv2.waitKey(1)&0xFF==27:
+                            break
                         
-                        setAngle(25)
+                        setAngle(23)
                         print("rojo")
                         
                         ret,frame=cap.read() 
                         red(frame)
                         green(frame)
                         cv2.imshow("FRAME",frame)
+                        if cv2.waitKey(1)&0xFF==27:
+                            break
                         
                     if green(frame) >= 1:
+                        
                         ret,frame=cap.read() 
                         red(frame)
                         green(frame)
                         cv2.imshow("FRAME",frame)
+                        if cv2.waitKey(1)&0xFF==27:
+                            break
                         
-                        setAngle(45)
+                        setAngle(47)
                         print("verde")
                         
                         ret,frame=cap.read() 
                         red(frame)
                         green(frame)
                         cv2.imshow("FRAME",frame)
+                        if cv2.waitKey(1)&0xFF==27:
+                            break
                         
-                ret,frame=cap.read() 
-                red(frame)
-                green(frame)
-                cv2.imshow("FRAME",frame)
+                    ret,frame=cap.read() 
+                    red(frame)
+                    green(frame)
+                    cv2.imshow("FRAME",frame)
+                    if cv2.waitKey(1)&0xFF==27:
+                        break
+
                 """ 
                 while Azul(frame) >=1 or naranja(frame) >= 1:
                     
@@ -414,4 +493,6 @@ while True:
                 red(frame)
                 green(frame)
                 cv2.imshow("FRAME",frame)
+                if cv2.waitKey(1)&0xFF==27:
+                    break
                         
