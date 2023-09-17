@@ -7,7 +7,7 @@ IITA FE 2 Participants and Roles:
 * **Jose Luis Gonzalez - Software**
 * **Axel Chungara - Design & Construction**
 
-* **Esteban Yurquina - Mentor**
+* **Esteban Yurquina - Coach**
 
 <p 
 align="center">
