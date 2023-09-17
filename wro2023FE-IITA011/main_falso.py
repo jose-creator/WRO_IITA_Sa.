@@ -44,7 +44,7 @@ def avanzar():
     GPIO.output(en,GPIO.HIGH)
     GPIO.output(in1,GPIO.HIGH)
     GPIO.output(in2,GPIO.LOW)
-    pwm2.ChangeDutyCycle(45)
+    pwm2.ChangeDutyCycle(60)
 
 def setAngle(angle):
     duty = angle / 18 + 3
@@ -83,26 +83,26 @@ while True:
         avanzar()
         
 
-        if dist_frontal < 55:
+        if dist_frontal < 45:
             if dist_izq < dist_der:
-                print("Dobla para la derecha")
-                setAngle(50)
-                time.sleep(1.2)
+                    print("Dobla para la derecha")
+                    setAngle(50)
+                    time.sleep(1.5)
             elif dist_der < dist_izq:
-                print("Dobla para la izquierda")
-                setAngle(14)
-                time.sleep(1.2)
-                
+                    print("Dobla para la izquierda")
+                    setAngle(14)
+                    time.sleep(1.5)
                 
         else:      
-            print("recto")
-            setAngle(30)
-       
-            if dist_izq < 50 and dist_izq < dist_der:
+                print("recto")
+                setAngle(30)
+               
+                if dist_izq < 110 and dist_izq < dist_der:
                     print("pared derecha")
-                    setAngle(36)
-                
-            elif dist_der < 50 and dist_der < dist_izq:
+                    setAngle(39)
+                            
+                elif dist_der < 110 and dist_der < dist_izq:
                     print("pared izquierda")
-                    setAngle(28)
-        
+                    setAngle(25)
+                
+  
