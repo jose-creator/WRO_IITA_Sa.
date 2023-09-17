@@ -5,28 +5,25 @@ IITA FE 2 Participants and Roles:
 
 * **Ezequiel Toconas**
 * Electronics & Hardware
-<p 
-align="center">
-<img src="Images\Team\Ezequiel.jpeg"
-alt="Foto Evolucion Diseño"
-style="width:100%; border:0;">
-</p>
 
 * **Jose Luis Gonzalez**
 * Software 
 
-
-
 * **Axel Chungara**
 * Design & Construction 
-
 
 * **Esteban Yurquina**
 * Rol en el equipo:
   * Mentor
 
+<p 
+align="center">
+<img src="Images\Team\Team.jpeg"
+alt="Foto Evolucion Diseño"
+style="width:100%; border:0;">
+</p>
 
-## Contents
+# Contents
 
     * Presentacion / Mision Secundaria.
     * Diseño / Sistema de Descenso
@@ -34,9 +31,9 @@ style="width:100%; border:0;">
     * Estacion Terrestre
     * Pruebas
 
-## Presentacion
+# Presentation
 
 
 
-* Equipo Completo
+
 
