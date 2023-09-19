@@ -79,7 +79,7 @@ def distancia(TRIG, ECHO):
     pulse_duration = end - start
     distance = pulse_duration * 17165
     distance = round(distance, 1)
-    time.sleep(0.3)
+    time.sleep(0.15)
     #print ('Distance:',distance,'cm')      
     
     return int(distance)
@@ -106,40 +106,7 @@ while True:
             
             pwm.ChangeDutyCycle(0)
 
-
-        while dist_frontal > 70:
-            start_time = time.time()
-            gyro_data = sensor.get_gyro_data()
-            gyro_z = (gyro_data['z'] - gyro_offset_z) * gyro_sacale
-            yaw += gyro_z * sample_interval
-            
-            #print(f'Angulo de Giro (Z):{math.degrees(yaw):.2f} grados')
-            dist_frontal = distancia(trigger_sensor_frontal , echo_sensor_frontal)
-            dist_der = distancia(trigger_sensor_der , echo_sensor_der)
-            dist_izq = distancia(trigger_sensor_izq  , echo_sensor_izq)
-            print("frontal =",dist_frontal,"der =", dist_der,"izq =", dist_izq)
-            
-            if abs(angular_velocity_z) > 100:
-                print("recto")
-                pwm.ChangeDutyCycle(4.8)
-                #time.sleep(0.2)
-            
-                pwm. ChangeDutyCycle(0)
-            if dist_izq < 75 and dist_izq < dist_der:
-                    print("pared derecha")
-                    setAngle(34)
-                                
-            elif dist_der < 75 and dist_der < dist_izq:
-                    print("pared izquierda")
-                    setAngle(26)
-
-        while dist_frontal < 70:
-            dist_frontal = distancia(trigger_sensor_frontal , echo_sensor_frontal)
-            dist_der = distancia(trigger_sensor_der , echo_sensor_der)
-            dist_izq = distancia(trigger_sensor_izq  , echo_sensor_izq)
-            print("frontal =",dist_frontal,"der =", dist_der,"izq =", dist_izq)
-        
-            avanzar(65) 
+        if dist_frontal < 60:
             if dist_izq < dist_der:
                     print("Dobla para la derecha")
                     setAngle(50)
@@ -148,3 +115,13 @@ while True:
                     print("Dobla para la izquierda")
                     setAngle(14)
                     #time.sleep(0.01)
+         
+        else:
+            if dist_izq < 65 and dist_izq < dist_der:
+                    print("pared derecha")
+                    setAngle(35)
+                                
+            elif dist_der < 65 and dist_der < dist_izq:
+                    print("pared izquierda")
+                    setAngle(25)
+
