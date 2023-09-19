@@ -1,14 +1,24 @@
 import RPi.GPIO as GPIO
 import time
-
-
+from mpu6050 import mpu6050
+import math
+import numpy as np
 #configuracion de pines GPIO
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
-in1 = 27
-in2 = 22
-en = 17
+address = 0x68
+sensor = mpu6050(address)
+yaw = 0.0
+gyro_sacale = math.pi / 180.0
+gyro_offset_z = 0.0
+
+sample_rate = 100
+sample_interval = 1.0 / sample_rate
+
+in1 = 5
+in2 = 6
+en = 0
 
 servo_pin = 14
 
@@ -40,23 +50,23 @@ pwm2.start(0)
 pwm= GPIO.PWM(servo_pin, 50)
 pwm.start(0)
 
-def avanzar():  
+def avanzar(x):  
     GPIO.output(en,GPIO.HIGH)
     GPIO.output(in1,GPIO.HIGH)
     GPIO.output(in2,GPIO.LOW)
-    pwm2.ChangeDutyCycle(60)
+    pwm2.ChangeDutyCycle(x)
 
 def setAngle(angle):
     duty = angle / 18 + 3
     GPIO.output(servo_pin, True)
     pwm.ChangeDutyCycle(duty)
-    #time.sleep(0.1)
+    time.sleep(1)
     GPIO.output(servo_pin, False)
     pwm.ChangeDutyCycle(duty)
 
 def distancia(TRIG, ECHO):
     GPIO.output(TRIG, True)
-    time.sleep(0.00001)
+    time.sleep(0.0001)
     GPIO.output(TRIG, False)
     while GPIO.input(ECHO)==0:
          global start
@@ -69,40 +79,72 @@ def distancia(TRIG, ECHO):
     pulse_duration = end - start
     distance = pulse_duration * 17165
     distance = round(distance, 1)
-    time.sleep(0.2)
+    time.sleep(0.3)
     #print ('Distance:',distance,'cm')      
     
     return int(distance)
 
 while True:
+        start_time = time.time()
+        gyro_data = sensor.get_gyro_data()
+        gyro_z = (gyro_data['z'] - gyro_offset_z) * gyro_sacale
+        yaw += gyro_z * sample_interval
+        angular_velocity_z = gyro_data['z']
+        #time.sleep(0.5)
+        #print(f'Angulo de Giro (Z):{math.degrees(yaw):.2f} grados')
 
         dist_frontal = distancia(trigger_sensor_frontal , echo_sensor_frontal)
         dist_der = distancia(trigger_sensor_der , echo_sensor_der)
         dist_izq = distancia(trigger_sensor_izq  , echo_sensor_izq)
         print("frontal =",dist_frontal,"der =", dist_der,"izq =", dist_izq)
-        avanzar()
-        
 
-        if dist_frontal < 45:
+        avanzar(45)
+        if abs(angular_velocity_z) > 100:
+            print("recto")
+            pwm.ChangeDutyCycle(4.8)
+            #time.sleep(0.2)
+            
+            pwm.ChangeDutyCycle(0)
+
+
+        while dist_frontal > 70:
+            start_time = time.time()
+            gyro_data = sensor.get_gyro_data()
+            gyro_z = (gyro_data['z'] - gyro_offset_z) * gyro_sacale
+            yaw += gyro_z * sample_interval
+            
+            #print(f'Angulo de Giro (Z):{math.degrees(yaw):.2f} grados')
+            dist_frontal = distancia(trigger_sensor_frontal , echo_sensor_frontal)
+            dist_der = distancia(trigger_sensor_der , echo_sensor_der)
+            dist_izq = distancia(trigger_sensor_izq  , echo_sensor_izq)
+            print("frontal =",dist_frontal,"der =", dist_der,"izq =", dist_izq)
+            
+            if abs(angular_velocity_z) > 100:
+                print("recto")
+                pwm.ChangeDutyCycle(4.8)
+                #time.sleep(0.2)
+            
+                pwm. ChangeDutyCycle(0)
+            if dist_izq < 75 and dist_izq < dist_der:
+                    print("pared derecha")
+                    setAngle(34)
+                                
+            elif dist_der < 75 and dist_der < dist_izq:
+                    print("pared izquierda")
+                    setAngle(26)
+
+        while dist_frontal < 70:
+            dist_frontal = distancia(trigger_sensor_frontal , echo_sensor_frontal)
+            dist_der = distancia(trigger_sensor_der , echo_sensor_der)
+            dist_izq = distancia(trigger_sensor_izq  , echo_sensor_izq)
+            print("frontal =",dist_frontal,"der =", dist_der,"izq =", dist_izq)
+        
+            avanzar(65) 
             if dist_izq < dist_der:
                     print("Dobla para la derecha")
                     setAngle(50)
-                    time.sleep(1.5)
+                    #time.sleep(0.01)
             elif dist_der < dist_izq:
                     print("Dobla para la izquierda")
                     setAngle(14)
-                    time.sleep(1.5)
-                
-        else:      
-                print("recto")
-                setAngle(30)
-               
-                if dist_izq < 110 and dist_izq < dist_der:
-                    print("pared derecha")
-                    setAngle(39)
-                            
-                elif dist_der < 110 and dist_der < dist_izq:
-                    print("pared izquierda")
-                    setAngle(25)
-                
-  
+                    #time.sleep(0.01)
