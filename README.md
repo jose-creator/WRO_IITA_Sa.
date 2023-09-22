@@ -18,14 +18,14 @@ style="width:100%; border:0;">
 
 # Contents
 
-    * Images.
-    * Video
-    * Schemes
-    * src
+    * Images: Robot Images
+    * Video: Link of Youtube Video, showing the robot passing the first challenge 
+    * Schemes: Electrical and Circuit Diagram.
+    * wro2023FE-IITA011: Source Code 
 
 # Presentation
 
-
+This report aims to provide a detailed and comprehensive view of the building and programming process of our robot called Groundron v1.0 by the IITA FE 2 team in preparation for the WRO Future Engineers competition. Over an extensive period of development, our team has worked tirelessly to overcome both technical and teamwork challenges.
 
 
 
